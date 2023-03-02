@@ -1,9 +1,7 @@
-# Online Python compiler (interpreter) to run Python online.
-# Write Python 3 code in this online editor and run it.
 
 # page 1 sign in , register, quit
 # page 2 sign in username password check from dict if true go page 3 else message
-# page 3 registration check there has or not in dict
+# page 3 quit and remove from userDatabase
 
 lowLetters = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u',
            'v', 'w', 'x', 'y', 'z'}
@@ -47,17 +45,19 @@ def userEntry(choosenPage):
 def checkSignIn(username, password):
     # isRegistered = False
     for user in userDatabase:
-        if username == user :
+        if username == user and userDatabase[user] == password:
             # isRegister = True
-            print("Registered")
+            print("Your are Registered")
             isNeedToCheckPassword = int(input('Do you want to check password status (if yes 1 or 0): '))
             if isNeedToCheckPassword == 1:
                 checkPasswordStatus(password)
             return True
-    print("Not registered")
-    isContinue = int(input('Do you want to register (if yes 1 or 0): '))
+    print("You are not registered or incorrect password")
+    isContinue = int(input('If you want to register enter 1 \nif you want to retry Sign in enter 2\n -> '))
     if isContinue == 1:
          userEntry(2)
+    elif isContinue == 2:
+        userEntry(1)
     return False
 
 def registration(username, password):
