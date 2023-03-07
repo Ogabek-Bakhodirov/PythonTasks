@@ -47,8 +47,7 @@ while True:
 while True:
     if len(usersInfoDB['students_grade']) != index:
         user = usersInfoDB['students_grade'][index]
-        # Check if Student append to student DB
-        if user[0][0] == 's':
+        if user[0][0] == 's': # Fix: what if user[0][0] == ''
             studentGradeDB["ID"].append(user[0])
             studentGradeDB["MATH"].append(user[1])
             studentGradeDB["PROGRAMMING"].append(user[2])
@@ -59,20 +58,11 @@ while True:
         index = 0
         break
 
-# for i in usersInfoDB["students_grade"]:
-#     studentGradeDB["ID"].append(i[0])
-#     studentGradeDB["MATH"].append(i[1])
-#     studentGradeDB["PROGRAMMING"].append(i[2])
-#     studentGradeDB["DATABASE"].append(i[3])
-#     studentGradeDB["ENGLISH"].append(i[4])
-
-
 # Get data from usersInfoDB to StudentInfo db
 while True:
     if len(usersInfoDB['student_info']) != index:
         user = usersInfoDB['student_info'][index]
-        # Check if Student append to student DB
-        if user[0][0] == 's':
+        if user[0][0] == 's': # Fix: what if user[0][0] == ''
             studentInfoDB["ID"].append(user[0])
             studentInfoDB["NAME"].append(user[1])
             studentInfoDB["SURNAME"].append(user[2])
@@ -83,33 +73,47 @@ while True:
         index = 0
         break
 
-# for i in usersInfoDB["student_info"]:
-#     studentInfoDB["ID"].append(i[0])
-#     studentInfoDB["NAME"].append(i[1])
-#     studentInfoDB["SURNAME"].append(i[2])
-#     studentInfoDB["AGE"].append(i[3])
-#     studentInfoDB["PAYMENTSTATUS"].append(i[4])
+# Random ID generator
+studentIDList = []
+def studentIdListGenerator():
+    index = 0
+    for i in studentDB['ID']:
+        studentIDList.append(index)
+        index += 1
+
+studentIdListGenerator()
+
+def removeRandomElementAndReturn(list):
+    index = random.sample(range(len(studentIDList)), 1)
+    value = list[index[0]]
+    del list[index[0]]
+    return value
 
 # Random ID generator
 def randomIDGenerator():
-    studentAmount = len(studentDB['ID'])
-    studentID = random.sample(range(0, studentAmount), 1)
-    print(studentID)
-    if studentID[0] < 10:
-        return f'st00{studentID[0]}'
+    studentID = removeRandomElementAndReturn(studentIDList)
+    if studentID < 10:
+        return f'st00{studentID}'
     elif studentID < 100:
-        return f'st0{studentID[0]}'
+        return f'st0{studentID}'
     else:
-        return f'st{studentID[0]}'
+        return f'st{studentID}'
 
 # Check id if unique add to dataBase
 def idGenerator():
     studentID = randomIDGenerator()
-    if studentID not in  studentDB['ID']:
-        print(studentID)
-        return studentID
+
+    if studentID in studentDB['ID']:
+        return idGenerator()
     else:
-        idGenerator()
+        return studentID
+
+
+    # while studentID in studentDB['ID']:
+    #     idGenerator()
+    # # continue
+    # return studentID
+        
     
 
 # Function for checking student records.
@@ -117,7 +121,7 @@ def seeStudentRecords(studentID, isNeedGrades):
     index = 0
     for info in studentDB['ID']:
         if info == studentID:
-            print('Student ID: ' +  studentDB['ID'][index])
+            print('\nStudent ID: ' +  studentDB['ID'][index])
             print('Student Password: ' + studentDB['PSW'][index])    
             print('Student name: ' + studentInfoDB["NAME"][index])
             print('Student surname: ' + studentInfoDB["SURNAME"][index])
@@ -138,7 +142,7 @@ def studentRegistration():
     name = input('\nEnter your name: ')
     surname = input('Enter your surname: ')
     age = input('Enter your age: ')
-    studentID = 'st000' #idGenerator() fix it
+    studentID = idGenerator() #fix it
     password = input('Enter your password: ')
 
     studentDB['ID'].append(studentID)
@@ -154,8 +158,7 @@ def studentRegistration():
     studentGradeDB['MATH'].append('null')
     studentGradeDB['PROGRAMMING'].append('null')
 
-    print('\n Your name: '+name+'\n','Your surname: '+surname+'\n','Your age: '+age+'\n',
-          'Your student ID: '+studentID+'\n','Your password: '+password+'\n')
+    print(f'\nYour name: {name}\nYour surname: {surname}\nYour age: {age}\nYour student ID: {studentID}\nYour password: {password}\n')
 
     isContinue = int(input('\nWhat do you want to do next: \nSee records -> 0 \nStop -> 1: \nEnter only number: '))
     if isContinue == 0:
@@ -175,7 +178,7 @@ def checkUserStatus(userInfo):
         # If action -> See records
         if action == 1:
             studentID = input("Enter your student ID: ")
-            seeStudentRecords(studentID)
+            seeStudentRecords(studentID, True)
 
         elif action == 0:
             studentRegistration()
