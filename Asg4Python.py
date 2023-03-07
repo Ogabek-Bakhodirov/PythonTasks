@@ -9,7 +9,6 @@ usersInfoDB = {
 
 adminDB = {'ID':[], 'PSW': []}
 studentDB = {'ID':[], 'PSW': []}
-# users = {'ID':[], 'PSW': []}
 studentGradeDB = {'ID':[], 'MATH':[], 'PROGRAMMING':[], 'DATABASE':[], 'ENGLISH':[]}
 studentInfoDB = {'ID':[], 'NAME':[], 'SURNAME':[], 'AGE':[], 'PAYMENTSTATUS':[]}
 
@@ -108,14 +107,6 @@ def idGenerator():
     else:
         return studentID
 
-
-    # while studentID in studentDB['ID']:
-    #     idGenerator()
-    # # continue
-    # return studentID
-        
-    
-
 # Function for checking student records.
 def seeStudentRecords(studentID, isNeedGrades):
     index = 0
@@ -182,6 +173,8 @@ def checkUserStatus(userInfo):
 
         elif action == 0:
             studentRegistration()
+    elif userInfo == 0:
+        print('Admin status')
 
 userInfo = int(input('Who are you:\nStudent - 1 \nAdmin - 0 \nEnter only number: '))
 checkUserStatus(userInfo)
