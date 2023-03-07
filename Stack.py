@@ -1,21 +1,33 @@
 class Stack:
+    # Init
     def __init__(self):
         self.list = []
+
+    # Add new Element in Top of List.
     def push(self, value):
         self.list.insert(0, value)
+
+    # Removes Top Itme in List and returns it.
     def pop(self):
         value = list[0]
         self.list.pop(0)
         return value 
+    
+    # Returns top element of List
     def top(self):
         return self.list[0]
+    
+    # Returns number of elements in List
     def size(self):
         return len(self.list)
+    
+    # Check is list Empty or not.
     def isEmpty(self):
-        if (size(self) == 0):
+        if (self.size(self) == 0):
             return True
         else: 
             return False
+        # Print Values.
     def printValues(self):
         print(self.list)
 
@@ -29,7 +41,3 @@ stack.printValues()
 topValue = stack.top()
 numberOfValues = stack.size()
 print(numberOfValues, topValue)
-
-if stack.size() % 2 == 0:
-    for i in range(stack.size() / 2):
-        print(i)
