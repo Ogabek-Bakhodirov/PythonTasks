@@ -149,12 +149,12 @@ def studentRegistration():
     studentInfoDB['NAME'].append(name)
     studentInfoDB['SURNAME'].append(surname)
     studentInfoDB['AGE'].append(age)
-    studentInfoDB['PAYMENTSTATUS'].append('null')
+    studentInfoDB['PAYMENTSTATUS'].append('None')
     studentGradeDB['ID'].append(studentID)
-    studentGradeDB['DATABASE'].append('null')
-    studentGradeDB['ENGLISH'].append('null')
-    studentGradeDB['MATH'].append('null')
-    studentGradeDB['PROGRAMMING'].append('null')
+    studentGradeDB['DATABASE'].append('0')
+    studentGradeDB['ENGLISH'].append('0')
+    studentGradeDB['MATH'].append('0')
+    studentGradeDB['PROGRAMMING'].append('0')
 
     studentIdListGenerator()
 
@@ -196,7 +196,7 @@ def changeStudentInfo(studentID):
 # Find failed students
 def findFailedStudent():
     failedStudentsIDList = []
-    for index in range(len(studentGradeDB)):
+    for index in range(len(studentGradeDB['ID'])):
         gradeResult = int(studentGradeDB['ENGLISH'][index]) + int(studentGradeDB['DATABASE'][index]) + int(studentGradeDB['MATH'][index]) + int(studentGradeDB['PROGRAMMING'][index])
         if (int(gradeResult) / 4) < 60:
             failedStudentsIDList.append(studentGradeDB['ID'][index])
@@ -227,7 +227,7 @@ def checkUserStatus(userInfo):
             studentRegistration()
         else:
             print("Wrong data")
-            
+
     elif userInfo == 0:
         while True:
             # Add see students
