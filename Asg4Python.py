@@ -133,7 +133,7 @@ def seeStudentRecords(studentID, isNeedGrades):
             index = 0
             return True
         index += 1 
-    print('Student id not found: 404')
+    print('\nStudent id not found: 404')
 
 # Registration of new student.
 def studentRegistration():
@@ -172,8 +172,23 @@ def studentRegistration():
 # Delete student's records
 def deleteStudent(studentID):
     if studentID in studentInfoDB['ID']:
-        # delete student's record
-        print("")
+        index = 0
+        for i in studentInfoDB['ID']:
+            if studentInfoDB['ID'][index] == studentID:
+                del studentDB['ID'][index]
+                del studentDB['PSW'][index]
+                del studentInfoDB['ID'][index]
+                del studentInfoDB['NAME'][index]
+                del studentInfoDB['SURNAME'][index]
+                del studentInfoDB['AGE'][index]
+                del studentInfoDB['PAYMENTSTATUS'][index]
+                del studentGradeDB['ID'][index]
+                del studentGradeDB['DATABASE'][index]
+                del studentGradeDB['ENGLISH'][index]
+                del studentGradeDB['MATH'][index]
+                del studentGradeDB['PROGRAMMING'][index]
+            index += 1
+        print("Student's records deleted succesfully! ")
     else:
         print("Incorrect student ID entered! ")
 
@@ -200,17 +215,15 @@ def findFailedStudent():
         gradeResult = int(studentGradeDB['ENGLISH'][index]) + int(studentGradeDB['DATABASE'][index]) + int(studentGradeDB['MATH'][index]) + int(studentGradeDB['PROGRAMMING'][index])
         if (int(gradeResult) / 4) < 60:
             failedStudentsIDList.append(studentGradeDB['ID'][index])
-    
     print(failedStudentsIDList)
 
 # Find high graded students
 def findHighGradedStudents():
     highGradedStudentsIDList = []
-    for index in range(len(studentGradeDB)):
+    for index in range(len(studentGradeDB['ID'])):
         gradeResult = int(studentGradeDB['ENGLISH'][index]) + int(studentGradeDB['DATABASE'][index]) + int(studentGradeDB['MATH'][index]) + int(studentGradeDB['PROGRAMMING'][index])
         if (int(gradeResult) / 4) > 86:
             highGradedStudentsIDList.append(studentGradeDB['ID'][index])
-    
     print(highGradedStudentsIDList)
  
 def checkUserStatus(userInfo):
@@ -234,6 +247,7 @@ def checkUserStatus(userInfo):
             nextMove = int(input("\nWhat you want to do: \nDelete student's record - 1. \nChange grades - 2. \nChange student info - 3. \nFind Failed students - 4. \nFind high graded students - 5. \nStop - 6. \nEnter only number -> "))
             if nextMove == 1:
                 deletedStudentID = input("Enter student id which you want to delete: ")
+                deleteStudent(deletedStudentID)
             elif nextMove == 2: 
                 studentIDForChangeGrade = input("Enter student id which you want to change grade: ")
                 subject = int(input("\nWhich subject's grade you want to change: \nMath - 1: \nProgramming - 2: \nDatabase - 3: \nEnglish - 4: \nEnter only number -> "))
