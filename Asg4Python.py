@@ -167,8 +167,52 @@ def studentRegistration():
     #     studentRegistration()
     else:
         print('\nNot valid number entered !')
+    
+# Delete student's records
+def deleteStudent(studentID):
+    if studentID in studentInfoDB['ID']:
+        # delete student's record
+        print("")
+    else:
+        print("Incorrect student ID entered! ")
 
+# Change student's grades
+def changeGrades(studentID, subject):
+    if studentID in studentGradeDB['ID']:
+        # Change student's grade
+        print("")
+    else:
+        print("Incorrect student ID entered! ")
 
+# Change student's info
+def changeStudentInfo(studentID):
+    if studentID in studentInfoDB['ID']:
+        # Change student's info
+        print("")
+    else:
+        print("Incorrect student ID entered! ")
+
+# Find failed students
+def findFailedStudent():
+    failedStudentsIDList = []
+    for index in range(len(studentGradeDB)):
+        gradeResult = int(studentGradeDB['ENGLISH'][index]) + int(studentGradeDB['DATABASE'][index]) + int(studentGradeDB['MATH'][index]) + int(studentGradeDB['PROGRAMMING'][index])
+        if (int(gradeResult) / 4) < 60:
+            failedStudentsIDList.append(studentGradeDB['ID'][index])
+    
+    print(failedStudentsIDList)
+
+# Find high graded students
+def findHighGradedStudents():
+    highGradedStudentsIDList = []
+    for index in range(len(studentGradeDB)):
+        gradeResult = int(studentGradeDB['ENGLISH'][index]) + int(studentGradeDB['DATABASE'][index]) + int(studentGradeDB['MATH'][index]) + int(studentGradeDB['PROGRAMMING'][index])
+        print(int(gradeResult) / 4)
+        if (int(gradeResult) / 4) > 66:
+            highGradedStudentsIDList.append(studentGradeDB['ID'][index])
+    
+    print(highGradedStudentsIDList)
+ 
 def checkUserStatus(userInfo):
     # UserInfo - Student
     if userInfo == 1:
@@ -188,16 +232,18 @@ def checkUserStatus(userInfo):
                 deletedStudentID = input("Enter student id which you want to delete: ")
             elif nextMove == 2: 
                 studentIDForChangeGrade = input("Enter student id which you want to change grade: ")
-                subject = int(input("\nWhich subject's grade you want to change: \Math - 1: \nProgramming - 2: \nDatabase - 3: \nEnglish - 4: \nEnter only number -> "))
+                subject = int(input("\nWhich subject's grade you want to change: \nMath - 1: \nProgramming - 2: \nDatabase - 3: \nEnglish - 4: \nEnter only number -> "))
             elif nextMove == 3:
                 deletedStudentID = input("Enter student id which you want to change info: ")
             elif nextMove == 4:
-                print("Failed students")
+                print("\nFailed students")
+                findFailedStudent()
             elif nextMove == 5:
-                print("High graded students")
+                print("\nHigh graded students")
+                findHighGradedStudents()
             elif nextMove == 6:
                 break
             else:
-                print("Wrong data entered")
+                print("\nWrong data entered")
 userInfo = int(input('Who are you:\nStudent - 1 \nAdmin - 0 \nEnter only number: '))
 checkUserStatus(userInfo)
