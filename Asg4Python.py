@@ -76,19 +76,24 @@ while True:
 studentIDList = []
 
 def studentIdListGenerator():
-    studentIDList.pop
     index = 0
+    global studentIDList 
+    studentIDList = []
     for i in studentDB['ID']:
         studentIDList.append(index)
         index += 1
+    studentIDList.append(index)
 
 studentIdListGenerator()
 
 def removeRandomElementAndReturn(list):
-    index = random.sample(range(len(studentIDList)), 1)
-    value = list[index[0]]
-    del list[index[0]]
-    return value
+    index = random.sample(range(len(studentIDList)+1), 1)
+    if index[0] >= len(studentIDList):
+        return removeRandomElementAndReturn(list)
+    else:
+        value = list[index[0]]
+        del list[index[0]]
+        return value
 
 # Random ID generator
 def randomIDGenerator():
@@ -151,20 +156,16 @@ def studentRegistration():
     studentGradeDB['MATH'].append('null')
     studentGradeDB['PROGRAMMING'].append('null')
 
-    # studentIDList.pop #should make empty list and generate new student id list
-    print(studentIDList)
+    studentIdListGenerator()
 
     print(f'\nYour name: {name}\nYour surname: {surname}\nYour age: {age}\nYour student ID: {studentID}\nYour password: {password}\n')
 
-    isContinue = int(input('\nWhat do you want to do next: \nSee records -> 0 \nStop -> 1: \nEnter only number: ')) #\nRegister again -> 2:
+    isContinue = int(input('\nWhat do you want to do next: \nSee records -> 0 \nStop -> 1: \nEnter only number: '))
     if isContinue == 0:
         studentID = input("\nEnter your student ID: ")
         seeStudentRecords(studentID, True)
     elif isContinue == 1:
         return True
-    # elif isContinue == 2:
-    #     studentIdListGenerator() #should make empty list and generate new student id list
-    #     studentRegistration()
     else:
         print('\nNot valid number entered !')
     
@@ -207,8 +208,7 @@ def findHighGradedStudents():
     highGradedStudentsIDList = []
     for index in range(len(studentGradeDB)):
         gradeResult = int(studentGradeDB['ENGLISH'][index]) + int(studentGradeDB['DATABASE'][index]) + int(studentGradeDB['MATH'][index]) + int(studentGradeDB['PROGRAMMING'][index])
-        print(int(gradeResult) / 4)
-        if (int(gradeResult) / 4) > 66:
+        if (int(gradeResult) / 4) > 86:
             highGradedStudentsIDList.append(studentGradeDB['ID'][index])
     
     print(highGradedStudentsIDList)
@@ -225,8 +225,12 @@ def checkUserStatus(userInfo):
 
         elif action == 0:
             studentRegistration()
+        else:
+            print("Wrong data")
+            
     elif userInfo == 0:
         while True:
+            # Add see students
             nextMove = int(input("\nWhat you want to do: \nDelete student's record - 1. \nChange grades - 2. \nChange student info - 3. \nFind Failed students - 4. \nFind high graded students - 5. \nStop - 6. \nEnter only number -> "))
             if nextMove == 1:
                 deletedStudentID = input("Enter student id which you want to delete: ")
@@ -245,5 +249,12 @@ def checkUserStatus(userInfo):
                 break
             else:
                 print("\nWrong data entered")
-userInfo = int(input('Who are you:\nStudent - 1 \nAdmin - 0 \nEnter only number: '))
-checkUserStatus(userInfo)
+    else:
+        print("Wrong data input!")
+
+while True:
+    userInfo = int(input('\nWho are you:\nStudent - 1 \nAdmin - 0 \nStop - 2 \nEnter only number: '))
+    if userInfo == 2:
+        break
+    else:
+        checkUserStatus(userInfo)
