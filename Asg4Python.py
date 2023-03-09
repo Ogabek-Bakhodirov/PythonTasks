@@ -76,6 +76,7 @@ while True:
 studentIDList = []
 
 def studentIdListGenerator():
+    studentIDList.pop
     index = 0
     for i in studentDB['ID']:
         studentIDList.append(index)
@@ -150,20 +151,20 @@ def studentRegistration():
     studentGradeDB['MATH'].append('null')
     studentGradeDB['PROGRAMMING'].append('null')
 
-    studentIDList = list()
+    # studentIDList.pop #should make empty list and generate new student id list
     print(studentIDList)
 
     print(f'\nYour name: {name}\nYour surname: {surname}\nYour age: {age}\nYour student ID: {studentID}\nYour password: {password}\n')
 
-    isContinue = int(input('\nWhat do you want to do next: \nSee records -> 0 \nStop -> 1: \nRegister again -> 2: \nEnter only number: '))
+    isContinue = int(input('\nWhat do you want to do next: \nSee records -> 0 \nStop -> 1: \nEnter only number: ')) #\nRegister again -> 2:
     if isContinue == 0:
         studentID = input("\nEnter your student ID: ")
         seeStudentRecords(studentID, True)
     elif isContinue == 1:
         return True
-    elif isContinue == 2:
-        studentIdListGenerator()
-        studentRegistration()
+    # elif isContinue == 2:
+    #     studentIdListGenerator() #should make empty list and generate new student id list
+    #     studentRegistration()
     else:
         print('\nNot valid number entered !')
 
@@ -181,7 +182,22 @@ def checkUserStatus(userInfo):
         elif action == 0:
             studentRegistration()
     elif userInfo == 0:
-        print('Admin status')
-
+        while True:
+            nextMove = int(input("\nWhat you want to do: \nDelete student's record - 1. \nChange grades - 2. \nChange student info - 3. \nFind Failed students - 4. \nFind high graded students - 5. \nStop - 6. \nEnter only number -> "))
+            if nextMove == 1:
+                deletedStudentID = input("Enter student id which you want to delete: ")
+            elif nextMove == 2: 
+                studentIDForChangeGrade = input("Enter student id which you want to change grade: ")
+                subject = int(input("\nWhich subject's grade you want to change: \Math - 1: \nProgramming - 2: \nDatabase - 3: \nEnglish - 4: \nEnter only number -> "))
+            elif nextMove == 3:
+                deletedStudentID = input("Enter student id which you want to change info: ")
+            elif nextMove == 4:
+                print("Failed students")
+            elif nextMove == 5:
+                print("High graded students")
+            elif nextMove == 6:
+                break
+            else:
+                print("Wrong data entered")
 userInfo = int(input('Who are you:\nStudent - 1 \nAdmin - 0 \nEnter only number: '))
 checkUserStatus(userInfo)
