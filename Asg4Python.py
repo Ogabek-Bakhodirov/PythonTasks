@@ -193,7 +193,7 @@ def deleteStudent(studentID):
         print("\nIncorrect student ID entered! ")
 
 # Change student's grades
-def changeGrades(studentID): #, subject
+def changeGrades(studentID):
     if studentID in studentGradeDB['ID']:
         # Change student's grade
         index = 0
@@ -202,11 +202,10 @@ def changeGrades(studentID): #, subject
                 print("\n" + studentInfoDB['NAME'][index] + " " + studentInfoDB['SURNAME'][index] + " student ID - " + studentInfoDB['ID'][index])
                 while True:
                     subject = int(input("\nWhich subject's grade you want to change: \nMath - 1: \nProgramming - 2: \nDatabase - 3: \nEnglish - 4: \nStop - 5 \nEnter only number -> "))
-                    newGrade = input("\nEnter new grade: ")
+                    newGrade = input("\nEnter new grade: ") # Should fix loop breaking
                     match subject:
                         case 1:
                             studentGradeDB['MATH'][index] = newGrade
-                            print(studentGradeDB['MATH'][index])
                         case 2:
                             studentGradeDB['PROGRAMMING'][index] = newGrade
                         case 3:
@@ -214,7 +213,7 @@ def changeGrades(studentID): #, subject
                         case 4:
                             studentGradeDB['ENGLISH'][index] = newGrade
                         case 5:
-                            return
+                            break
                         case _:
                             print("Not valid value entered!")
                 return 
@@ -226,7 +225,13 @@ def changeGrades(studentID): #, subject
 def changeStudentInfo(studentID):
     if studentID in studentInfoDB['ID']:
         # Change student's info
-        print("")
+        index = 0
+        for i in studentInfoDB['ID']:
+            if studentID == studentInfoDB['ID'][index]:
+                newValue = input("Update payment status (Paid / Not Paid): ")
+                studentInfoDB['PAYMENTSTATUS'][index] = newValue
+                return
+            index += 1
     else:
         print("\nIncorrect student ID entered! ")
 
@@ -274,10 +279,8 @@ def checkUserStatus(userInfo):
                 studentIDForChangeGrade = input("\nEnter student id which you want to change grade: ")
                 changeGrades(studentIDForChangeGrade)
             elif nextMove == 3:
-                deletedStudentID = input("\nEnter student id which you want to change info: ")
-
-
-
+                infoChangedStudentID = input("\nEnter student id which you want to change info: ")
+                changeStudentInfo(infoChangedStudentID)
             elif nextMove == 4:
                 print("\nFailed students")
                 findFailedStudent()
