@@ -188,17 +188,39 @@ def deleteStudent(studentID):
                 del studentGradeDB['MATH'][index]
                 del studentGradeDB['PROGRAMMING'][index]
             index += 1
-        print("Student's records deleted succesfully! ")
+        print("\nStudent's records deleted succesfully! ")
     else:
-        print("Incorrect student ID entered! ")
+        print("\nIncorrect student ID entered! ")
 
 # Change student's grades
-def changeGrades(studentID, subject):
+def changeGrades(studentID): #, subject
     if studentID in studentGradeDB['ID']:
         # Change student's grade
-        print("")
+        index = 0
+        for i in studentGradeDB['ID']:
+            if studentGradeDB['ID'][index] == studentID:
+                print("\n" + studentInfoDB['NAME'][index] + " " + studentInfoDB['SURNAME'][index] + " student ID - " + studentInfoDB['ID'][index])
+                while True:
+                    subject = int(input("\nWhich subject's grade you want to change: \nMath - 1: \nProgramming - 2: \nDatabase - 3: \nEnglish - 4: \nStop - 5 \nEnter only number -> "))
+                    newGrade = input("\nEnter new grade: ")
+                    match subject:
+                        case 1:
+                            studentGradeDB['MATH'][index] = newGrade
+                            print(studentGradeDB['MATH'][index])
+                        case 2:
+                            studentGradeDB['PROGRAMMING'][index] = newGrade
+                        case 3:
+                            studentGradeDB['DATABASE'][index] = newGrade
+                        case 4:
+                            studentGradeDB['ENGLISH'][index] = newGrade
+                        case 5:
+                            return
+                        case _:
+                            print("Not valid value entered!")
+                return 
+            index += 1
     else:
-        print("Incorrect student ID entered! ")
+        print("\nIncorrect student ID entered! ")
 
 # Change student's info
 def changeStudentInfo(studentID):
@@ -206,7 +228,7 @@ def changeStudentInfo(studentID):
         # Change student's info
         print("")
     else:
-        print("Incorrect student ID entered! ")
+        print("\nIncorrect student ID entered! ")
 
 # Find failed students
 def findFailedStudent():
@@ -233,7 +255,7 @@ def checkUserStatus(userInfo):
         action = int(input('\nWhat you want to do: \nRegister - 0, \nSee my records - 1: \nEnter only number: '))
         # If action -> See records
         if action == 1:
-            studentID = input("Enter your student ID: ")
+            studentID = input("\nEnter your student ID: ")
             seeStudentRecords(studentID, True)
 
         elif action == 0:
@@ -246,13 +268,16 @@ def checkUserStatus(userInfo):
             # Add see students
             nextMove = int(input("\nWhat you want to do: \nDelete student's record - 1. \nChange grades - 2. \nChange student info - 3. \nFind Failed students - 4. \nFind high graded students - 5. \nStop - 6. \nEnter only number -> "))
             if nextMove == 1:
-                deletedStudentID = input("Enter student id which you want to delete: ")
+                deletedStudentID = input("\nEnter student id which you want to delete: ")
                 deleteStudent(deletedStudentID)
             elif nextMove == 2: 
-                studentIDForChangeGrade = input("Enter student id which you want to change grade: ")
-                subject = int(input("\nWhich subject's grade you want to change: \nMath - 1: \nProgramming - 2: \nDatabase - 3: \nEnglish - 4: \nEnter only number -> "))
+                studentIDForChangeGrade = input("\nEnter student id which you want to change grade: ")
+                changeGrades(studentIDForChangeGrade)
             elif nextMove == 3:
-                deletedStudentID = input("Enter student id which you want to change info: ")
+                deletedStudentID = input("\nEnter student id which you want to change info: ")
+
+
+
             elif nextMove == 4:
                 print("\nFailed students")
                 findFailedStudent()
