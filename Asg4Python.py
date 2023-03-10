@@ -273,11 +273,4 @@ while True:
     if userInfo == 2:
         writeDataToCsv()
         break
-    print(studentDB)
-    print("")
-    print(studentInfoDB)
-    print("")
-    print(studentGradeDB)
-    print("")
-    print(adminDB)
     checkUserStatus(userInfo)
