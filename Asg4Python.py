@@ -179,7 +179,7 @@ def changeGrades(studentID):
                                 print("Not valid value entered!")
                     return 
                 index += 1
-        print("\nIncorrect student ID entered! ")
+    print("\nIncorrect student ID entered! ")
 
 # Change student's info
 def changeStudentInfo(studentID):
@@ -190,7 +190,7 @@ def changeStudentInfo(studentID):
                     newValue = input("Update payment status (Paid / Not Paid): ")
                     studentInfoDB[index]['PAYMENTSTATUS'] = newValue
                     return
-        print("\nIncorrect student ID entered! ")
+    print("\nIncorrect student ID entered! ")
 
 # Find failed students
 def findFailedStudent():
@@ -252,20 +252,32 @@ def checkUserStatus(userInfo):
         print("Wrong data input!")
 
 # # Write updated data to CSV file
-# def writeDataToCsv():
-#     directions = ["/Users/ogabekbakhodirov/Documents/Python/PythonTasks/CSVFiles/New_Student_info.csv"]
-#     file_header = studentInfoDB.keys()
-#     values = studentInfoDB.values()
+def writeDataToCsv():
+    directions = ["/Users/ogabekbakhodirov/Documents/Python/PythonTasks/CSVFiles/New_Student_info.csv",
+                  "/Users/ogabekbakhodirov/Documents/Python/PythonTasks/CSVFiles/New_Students_grade.csv",
+                  "/Users/ogabekbakhodirov/Documents/Python/PythonTasks/CSVFiles/New_Student.csv",
+                  "/Users/ogabekbakhodirov/Documents/Python/PythonTasks/CSVFiles/New_Admins.csv"]
+    file_headers = [studentInfoDB[0].keys(), studentGradeDB[0].keys(), studentDB[0].keys(), adminDB[0].keys()]
+    row_values = [studentInfoDB, studentGradeDB, studentDB, adminDB]
 
-#     for direction in directions:
-#         for header in file_header:
-#             for value in values:
-
-#                 # with open(direction, "w") as file:
-#                 #     writer = csv.writer()
+    for index, value in enumerate(directions):
+       with open(directions[index], 'w') as file:
+            # Create a CSV dictionary writer and add the student header as field names
+            writer = csv.DictWriter(file, fieldnames=file_headers[index])
+            # Use writerows() not writerow()
+            writer.writeheader()
+            writer.writerows(row_values[index])
 
 while True:
     userInfo = int(input('\nWho are you:\nStudent - 1 \nAdmin - 0 \nStop - 2 \nEnter only number: '))
     if userInfo == 2:
+        writeDataToCsv()
         break
+    print(studentDB)
+    print("")
+    print(studentInfoDB)
+    print("")
+    print(studentGradeDB)
+    print("")
+    print(adminDB)
     checkUserStatus(userInfo)
