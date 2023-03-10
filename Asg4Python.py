@@ -7,22 +7,22 @@ usersInfoDB = {
     'students_grade' : []
 }
 
-adminDB = {'ID':[], 'PSW': []}
-studentDB = {'ID':[], 'PSW': []}
-studentGradeDB = {'ID':[], 'MATH':[], 'PROGRAMMING':[], 'DATABASE':[], 'ENGLISH':[]}
-studentInfoDB = {'ID':[], 'NAME':[], 'SURNAME':[], 'AGE':[], 'PAYMENTSTATUS':[]}
+adminDB = []
+studentDB = []
+studentGradeDB = [] 
+studentInfoDB = [] #{'ID':[], 'NAME':[], 'SURNAME':[], 'AGE':[], 'PAYMENTSTATUS':[]}
 
-def copyFromCSV(fileDirection, csvMode, passDataTo):
+def copyFromCSV(fileDirection, passDataTo):
     # Check direction 
-    with open(fileDirection, csvMode) as file:
+    with open(fileDirection, 'r') as file:
         csvreader = csv.reader(file)
         for info in csvreader:
             # Check Dictionary direction
             usersInfoDB[passDataTo].append(info)
 
-copyFromCSV("/Users/ogabekbakhodirov/Documents/Python/PythonTasks/Students_grade.csv", "r", "students_grade")
-copyFromCSV("/Users/ogabekbakhodirov/Documents/Python/PythonTasks/Student_info.csv", "r", "student_info")
-copyFromCSV("/Users/ogabekbakhodirov/Documents/Python/PythonTasks/Users.csv", "r", "users")
+copyFromCSV("/Users/ogabekbakhodirov/Documents/Python/PythonTasks/CSVFiles/Students_grade.csv", "students_grade")
+copyFromCSV("/Users/ogabekbakhodirov/Documents/Python/PythonTasks/CSVFiles/Student_info.csv", "student_info")
+copyFromCSV("/Users/ogabekbakhodirov/Documents/Python/PythonTasks/CSVFiles/Users.csv", "users")
 
 # Get data from usersInfoDB to Student/Admin
 index = 0
@@ -31,12 +31,10 @@ while True:
         user = usersInfoDB['users'][index]
         # Check if Student append to student DB
         if user[0][0] == 's':
-            studentDB['ID'].append(user[0])
-            studentDB['PSW'].append(user[1])
+            studentDB.append({'ID':user[0], 'PSW':user[1]})
         # Check if Admin append to admin DB
         elif user[0][0] == 'a':
-            adminDB['ID'].append(user[0])
-            adminDB['PSW'].append(user[1])
+            adminDB.append({'ID':user[0], 'PSW':user[1]})
         index += 1
     else:
         index = 0
@@ -47,11 +45,7 @@ while True:
     if len(usersInfoDB['students_grade']) != index:
         user = usersInfoDB['students_grade'][index]
         if user[0][0] == 's': # Fix: what if user[0][0] == ''
-            studentGradeDB["ID"].append(user[0])
-            studentGradeDB["MATH"].append(user[1])
-            studentGradeDB["PROGRAMMING"].append(user[2])
-            studentGradeDB["DATABASE"].append(user[3])
-            studentGradeDB["ENGLISH"].append(user[4])
+            studentGradeDB.append({"ID":user[0], "MATH":user[1],"PROGRAMMING":user[2],"DATABASE":user[3],"ENGLISH":user[4]})
         index += 1
     else:
         index = 0
@@ -62,11 +56,7 @@ while True:
     if len(usersInfoDB['student_info']) != index:
         user = usersInfoDB['student_info'][index]
         if user[0][0] == 's': # Fix: what if user[0][0] == ''
-            studentInfoDB["ID"].append(user[0])
-            studentInfoDB["NAME"].append(user[1])
-            studentInfoDB["SURNAME"].append(user[2])
-            studentInfoDB["AGE"].append(user[3])
-            studentInfoDB["PAYMENTSTATUS"].append(user[4])
+            studentInfoDB.append({'ID':user[0],'NAME':user[1],'SURNAME':user[2],'AGE':user[3],'PAYMENTSTATUS':user[4]})
         index += 1
     else:
         index = 0
@@ -79,7 +69,7 @@ def studentIdListGenerator():
     index = 0
     global studentIDList 
     studentIDList = []
-    for i in studentDB['ID']:
+    for i in studentDB:
         studentIDList.append(index)
         index += 1
     studentIDList.append(index)
@@ -108,31 +98,20 @@ def randomIDGenerator():
 # Check id if unique add to dataBase
 def idGenerator():
     studentID = randomIDGenerator()
-
-    if studentID in studentDB['ID']:
-        return idGenerator()
-    else:
-        return studentID
+    for value in studentDB:
+        if studentID == value['ID']:
+            return idGenerator()
+    return studentID
 
 # Function for checking student records.
-def seeStudentRecords(studentID, isNeedGrades):
-    index = 0
-    for info in studentDB['ID']:
-        if info == studentID:
-            print('\nStudent ID: ' +  studentDB['ID'][index])
-            print('Student Password: ' + studentDB['PSW'][index])    
-            print('Student name: ' + studentInfoDB["NAME"][index])
-            print('Student surname: ' + studentInfoDB["SURNAME"][index])
-            print('Student age: ' + studentInfoDB["AGE"][index])
-            print('Student payment status: ' + studentInfoDB["PAYMENTSTATUS"][index])  
-            if isNeedGrades == True:
-                print('Math grade: ' + studentGradeDB["MATH"][index])
-                print('Programming grade: ' + studentGradeDB["PROGRAMMING"][index])
-                print('Database grade: ' + studentGradeDB["DATABASE"][index])
-                print('English grade: ' + studentGradeDB["ENGLISH"][index])
-            index = 0
-            return True
-        index += 1 
+def seeStudentRecords(studentID):
+    for index, info in enumerate(studentDB):
+        if info["ID"] == studentID:
+            print('\nStudent ID: ' + studentDB[index]['ID'] + '\nStudent Password: ' + studentDB[index]['PSW'] + '\nStudent name: ' + studentInfoDB[index]["NAME"])
+            print('Student surname: ' + studentInfoDB[index]["SURNAME"] + '\nStudent age: ' + studentInfoDB[index]["AGE"] + '\nStudent payment status: ' + studentInfoDB[index]["PAYMENTSTATUS"])
+            print('Math grade: ' + studentGradeDB[index]["MATH"] + '\nProgramming grade: ' + studentGradeDB[index]["PROGRAMMING"])
+            print('Database grade: ' + studentGradeDB[index]["DATABASE"] + '\nEnglish grade: ' + studentGradeDB[index]["ENGLISH"])
+            return
     print('\nStudent id not found: 404')
 
 # Registration of new student.
@@ -143,19 +122,9 @@ def studentRegistration():
     studentID = idGenerator()
     password = input('Enter your password: ')
 
-    studentDB['ID'].append(studentID)
-    studentDB['PSW'].append(password)
-    studentInfoDB['ID'].append(studentID)
-    studentInfoDB['NAME'].append(name)
-    studentInfoDB['SURNAME'].append(surname)
-    studentInfoDB['AGE'].append(age)
-    studentInfoDB['PAYMENTSTATUS'].append('None')
-    studentGradeDB['ID'].append(studentID)
-    studentGradeDB['DATABASE'].append('0')
-    studentGradeDB['ENGLISH'].append('0')
-    studentGradeDB['MATH'].append('0')
-    studentGradeDB['PROGRAMMING'].append('0')
-
+    studentDB.append({'ID':studentID, 'PSW':password})
+    studentInfoDB.append({'ID':studentID, 'NAME':name, 'SURNAME':surname,'AGE':age, 'PAYMENTSTATUS':'None'})
+    studentGradeDB.append({"ID":studentID, "MATH":'0',"PROGRAMMING":'0',"DATABASE":'0',"ENGLISH":'0'})
     studentIdListGenerator()
 
     print(f'\nYour name: {name}\nYour surname: {surname}\nYour age: {age}\nYour student ID: {studentID}\nYour password: {password}\n')
@@ -163,7 +132,7 @@ def studentRegistration():
     isContinue = int(input('\nWhat do you want to do next: \nSee records -> 0 \nStop -> 1: \nEnter only number: '))
     if isContinue == 0:
         studentID = input("\nEnter your student ID: ")
-        seeStudentRecords(studentID, True)
+        seeStudentRecords(studentID)
     elif isContinue == 1:
         return True
     else:
@@ -171,86 +140,74 @@ def studentRegistration():
     
 # Delete student's records
 def deleteStudent(studentID):
-    if studentID in studentInfoDB['ID']:
-        index = 0
-        for i in studentInfoDB['ID']:
-            if studentInfoDB['ID'][index] == studentID:
-                del studentDB['ID'][index]
-                del studentDB['PSW'][index]
-                del studentInfoDB['ID'][index]
-                del studentInfoDB['NAME'][index]
-                del studentInfoDB['SURNAME'][index]
-                del studentInfoDB['AGE'][index]
-                del studentInfoDB['PAYMENTSTATUS'][index]
-                del studentGradeDB['ID'][index]
-                del studentGradeDB['DATABASE'][index]
-                del studentGradeDB['ENGLISH'][index]
-                del studentGradeDB['MATH'][index]
-                del studentGradeDB['PROGRAMMING'][index]
-            index += 1
-        print("\nStudent's records deleted succesfully! ")
-    else:
-        print("\nIncorrect student ID entered! ")
+    for index, student in enumerate(studentInfoDB):
+        if studentID in student['ID']:
+            # for index, value in enumerate(studentInfoDB):
+                # if studentInfoDB[index]['ID'] == studentID:
+            del studentDB[index]
+            del studentInfoDB[index]
+            del studentGradeDB[index]
+            print("\nStudent's records deleted succesfully! ")
+            studentIdListGenerator()
+            return 
+    print("\nIncorrect student ID entered! ")
 
 # Change student's grades
 def changeGrades(studentID):
-    if studentID in studentGradeDB['ID']:
-        # Change student's grade
-        index = 0
-        for i in studentGradeDB['ID']:
-            if studentGradeDB['ID'][index] == studentID:
-                print("\n" + studentInfoDB['NAME'][index] + " " + studentInfoDB['SURNAME'][index] + " student ID - " + studentInfoDB['ID'][index])
-                while True:
-                    subject = int(input("\nWhich subject's grade you want to change: \nMath - 1: \nProgramming - 2: \nDatabase - 3: \nEnglish - 4: \nStop - 5 \nEnter only number -> "))
-                    newGrade = input("\nEnter new grade: ") # Should fix loop breaking
-                    match subject:
-                        case 1:
-                            studentGradeDB['MATH'][index] = newGrade
-                        case 2:
-                            studentGradeDB['PROGRAMMING'][index] = newGrade
-                        case 3:
-                            studentGradeDB['DATABASE'][index] = newGrade
-                        case 4:
-                            studentGradeDB['ENGLISH'][index] = newGrade
-                        case 5:
-                            break
-                        case _:
-                            print("Not valid value entered!")
-                return 
-            index += 1
-    else:
+    for student in studentGradeDB:
+        if studentID in student['ID']:
+            # Change student's grade
+            index = 0
+            for i in studentGradeDB:
+                if studentGradeDB[index]['ID'] == studentID:
+                    print("\n" + studentInfoDB[index]['NAME'] + " " + studentInfoDB[index]['SURNAME'] + " student ID - " + studentInfoDB[index]['ID'])
+                    while True:
+                        subject = int(input("\nWhich subject's grade you want to change: \nMath - 1: \nProgramming - 2: \nDatabase - 3: \nEnglish - 4: \nStop - 5 \nEnter only number -> "))
+                        newGrade = input("\nEnter new grade: ") # Should fix loop breaking
+                        match subject:
+                            case 1:
+                                studentGradeDB[index]['MATH'] = newGrade
+                            case 2:
+                                studentGradeDB[index]['PROGRAMMING'] = newGrade
+                            case 3:
+                                studentGradeDB[index]['DATABASE'] = newGrade
+                            case 4:
+                                studentGradeDB[index]['ENGLISH'] = newGrade
+                            case 5:
+                                break
+                            case _:
+                                print("Not valid value entered!")
+                    return 
+                index += 1
         print("\nIncorrect student ID entered! ")
 
 # Change student's info
 def changeStudentInfo(studentID):
-    if studentID in studentInfoDB['ID']:
-        # Change student's info
-        index = 0
-        for i in studentInfoDB['ID']:
-            if studentID == studentInfoDB['ID'][index]:
-                newValue = input("Update payment status (Paid / Not Paid): ")
-                studentInfoDB['PAYMENTSTATUS'][index] = newValue
-                return
-            index += 1
-    else:
+    for student in studentInfoDB:
+        if studentID in student['ID']:
+            for index, value in enumerate(studentInfoDB):
+                if studentID == studentInfoDB[index]['ID']:
+                    newValue = input("Update payment status (Paid / Not Paid): ")
+                    studentInfoDB[index]['PAYMENTSTATUS'] = newValue
+                    return
         print("\nIncorrect student ID entered! ")
 
 # Find failed students
 def findFailedStudent():
     failedStudentsIDList = []
-    for index in range(len(studentGradeDB['ID'])):
-        gradeResult = int(studentGradeDB['ENGLISH'][index]) + int(studentGradeDB['DATABASE'][index]) + int(studentGradeDB['MATH'][index]) + int(studentGradeDB['PROGRAMMING'][index])
+    for index in range(len(studentGradeDB)):
+        gradeResult = int(studentGradeDB[index]['ENGLISH']) + int(studentGradeDB[index]['DATABASE']) + int(studentGradeDB[index]['MATH']) + int(studentGradeDB[index]['PROGRAMMING'])
         if (int(gradeResult) / 4) < 60:
-            failedStudentsIDList.append(studentGradeDB['ID'][index])
+            failedStudentsIDList.append(studentGradeDB[index]['ID'])
     print(failedStudentsIDList)
 
 # Find high graded students
 def findHighGradedStudents():
     highGradedStudentsIDList = []
-    for index in range(len(studentGradeDB['ID'])):
-        gradeResult = int(studentGradeDB['ENGLISH'][index]) + int(studentGradeDB['DATABASE'][index]) + int(studentGradeDB['MATH'][index]) + int(studentGradeDB['PROGRAMMING'][index])
+    for index in range(len(studentGradeDB)):
+        gradeResult = int(studentGradeDB[index]['ENGLISH']) + int(studentGradeDB[index]['DATABASE']) + int(studentGradeDB[index]['MATH']) + int(studentGradeDB[index]['PROGRAMMING'])
         if (int(gradeResult) / 4) > 86:
-            highGradedStudentsIDList.append(studentGradeDB['ID'][index])
+            highGradedStudentsIDList.append(studentGradeDB[index]['ID'])
     print(highGradedStudentsIDList)
  
 def checkUserStatus(userInfo):
@@ -261,13 +218,13 @@ def checkUserStatus(userInfo):
         # If action -> See records
         if action == 1:
             studentID = input("\nEnter your student ID: ")
-            seeStudentRecords(studentID, True)
-
+            seeStudentRecords(studentID)
         elif action == 0:
             studentRegistration()
         else:
             print("Wrong data")
 
+    # Admin Panel
     elif userInfo == 0:
         while True:
             # Add see students
@@ -294,9 +251,21 @@ def checkUserStatus(userInfo):
     else:
         print("Wrong data input!")
 
+# # Write updated data to CSV file
+# def writeDataToCsv():
+#     directions = ["/Users/ogabekbakhodirov/Documents/Python/PythonTasks/CSVFiles/New_Student_info.csv"]
+#     file_header = studentInfoDB.keys()
+#     values = studentInfoDB.values()
+
+#     for direction in directions:
+#         for header in file_header:
+#             for value in values:
+
+#                 # with open(direction, "w") as file:
+#                 #     writer = csv.writer()
+
 while True:
     userInfo = int(input('\nWho are you:\nStudent - 1 \nAdmin - 0 \nStop - 2 \nEnter only number: '))
     if userInfo == 2:
         break
-    else:
-        checkUserStatus(userInfo)
+    checkUserStatus(userInfo)
