@@ -10,7 +10,7 @@ usersInfoDB = {
 adminDB = []
 studentDB = []
 studentGradeDB = [] 
-studentInfoDB = [] #{'ID':[], 'NAME':[], 'SURNAME':[], 'AGE':[], 'PAYMENTSTATUS':[]}
+studentInfoDB = []
 
 def copyFromCSV(fileDirection, passDataTo):
     # Check direction 
@@ -142,8 +142,6 @@ def studentRegistration():
 def deleteStudent(studentID):
     for index, student in enumerate(studentInfoDB):
         if studentID in student['ID']:
-            # for index, value in enumerate(studentInfoDB):
-                # if studentInfoDB[index]['ID'] == studentID:
             del studentDB[index]
             del studentInfoDB[index]
             del studentGradeDB[index]
@@ -262,9 +260,7 @@ def writeDataToCsv():
 
     for index, value in enumerate(directions):
        with open(directions[index], 'w') as file:
-            # Create a CSV dictionary writer and add the student header as field names
             writer = csv.DictWriter(file, fieldnames=file_headers[index])
-            # Use writerows() not writerow()
             writer.writeheader()
             writer.writerows(row_values[index])
 
@@ -272,12 +268,6 @@ while True:
     userInfo = int(input('\nWho are you:\nStudent - 1 \nAdmin - 0 \nStop - 2 \nEnter only number: '))
     if userInfo == 2:
         writeDataToCsv()
+        print("Done!")
         break
-    print(studentDB)
-    print("")
-    print(studentInfoDB)
-    print("")
-    print(studentGradeDB)
-    print("")
-    print(adminDB)
     checkUserStatus(userInfo)
