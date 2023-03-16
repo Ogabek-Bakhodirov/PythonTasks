@@ -31,13 +31,29 @@ class Stack:
     def printValues(self):
         print(self.list)
 
-list = [1, 2, 3, 4, 5, 4, 7]
+value = '{x(xx})'
 stack = Stack()
-for i in list:
-    stack.push(i)
+for i in value:
+    if i == '(':
+        stack.push(1)
+    elif i == ')':
+        stack.push(-1)
+    elif i == '{':
+        stack.push(2)
+    elif i == '}':
+        stack.push(-2)
+    else:
+        stack.push(0)
+
 stack.printValues()
-stack.pop()
-stack.printValues()
-topValue = stack.top()
-numberOfValues = stack.size()
-print(numberOfValues, topValue)
+
+print("\n")
+
+def checker(stack, index):
+    count = 0
+    for value in stack:
+        if value != 0:
+            print(value)
+        count += 1
+
+checker(stack.list, 0)

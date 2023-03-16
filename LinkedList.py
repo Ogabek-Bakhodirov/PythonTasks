@@ -23,10 +23,26 @@ class LinkedList:
             print(value.info)
             value = value.next
 
+    def deleteTop(self):
+        deletedElement = self.__head
+        self.__head = self.__head.next
+        del(deletedElement)
+
+
     def addToHead(self, x):
         head = Node(x)
         head.next = self.__head
         self.__head = head
+
+    # def addToAfterX(self, after, value):
+    #     newValue = Node(value)
+    #     startValue = self.__head
+    #     while(startValue.info != after and startValue == self.__tail):
+    #         startValue = startValue.next
+    #     oldNext = startValue.next
+    #     startValue.next = newValue
+    #     newValue.next = oldNext
+
         
         
 
@@ -38,6 +54,14 @@ linkedList.printElements()
 print("\n")
 linkedList.addToHead(20)
 linkedList.printElements()
+
+print("\n")
+linkedList.deleteTop()
+linkedList.printElements()
+
+# print("\n")
+# linkedList.addToAfterX(5, 100)
+# linkedList.printElements()
 
 
 
