@@ -35,14 +35,26 @@ while True:
 # Id generator
     def idGenerator():
         return len(user)+1
+    
+    # # Forget password function
+    # def forgetPassword(username):
+    #     for value in user:
+    #         if username == value['Username']:
+    #             print("\n")
+    #             print(value['Question'])
+    #             asnwer = input("Please enter answer for the question")
 
 # Check log in
     def checkLogin(username, password):
         for index, value in enumerate(user):
             if (username == user[index]["Username"] and password == user[index]['PSW']):
                 return True
-        print('Username or password is incorrect! Please try again.')
-        return False
+        print('\nUsername or password is incorrect! Please try again.')
+        forgetPsw = int(input("Forget password?\nYes - 0\nNo - 1: \n-> "))
+        if forgetPsw == 1:
+            return False
+        elif forgetPsw == 0:
+            changeUserPassword(username)
 
 # When registered check username if has in database or not
     def checkUsername(username):
@@ -52,6 +64,30 @@ while True:
                 return False
         print(f'Success! Your username is {username}')
         return True
+    
+    # Change password
+    def changeUserPassword(username):
+        for index, value in enumerate(user):
+            if username == value['Username']:
+                print(f"\n{value['Question']}")
+                attemps = 3
+                while True:
+                    print(f"You have {attemps} attemps!")
+                    if attemps != 0:
+                        attemps -= 1
+                        answer = input("Enter answer for this question: ")
+                        if answer == value['Answer']:
+                            while True:
+                                newPassword = input("Enter new password: ")
+                                confirmNewPsw = input("Confirm new password: ")
+                                if checkPasswordStatus(newPassword, confirmNewPsw):
+                                    user[index]['PSW'] = newPassword
+                                    return
+                        else:
+                            print("Incorrect answer. Try again")
+                    else:
+                        print("You cannot change your password. Please try later.")
+                        break
 
 # Check password
     def checkPasswordStatus(password, confirmedPassword):  
@@ -90,36 +126,12 @@ while True:
     def seeRecords(username):
         for index, value in enumerate(userInfo):
             if username == user[index]['Username']:
-                print(f"ID: {value['ID']}")
+                print(f"\nID: {value['ID']}")
                 print('Name: ' + value['Name'])
                 print("Surname: " + value['Surname']) 
                 print('Age: ' + value['age'])
                 print('Passport: ' + value['passport'])
                 return
-
-    # Change password
-    def changeUserPassword(username):
-        for index, value in enumerate(user):
-            if username == value['Username']:
-                print(f"\n{value['Question']}")
-                attemps = 3
-                while True:
-                    print(f"You have {attemps} attemps!")
-                    if attemps != 0:
-                        attemps -= 1
-                        answer = input("Enter answer for this question: ")
-                        if answer == value['Answer']:
-                            while True:
-                                newPassword = input("Enter new password: ")
-                                confirmNewPsw = input("Confirm new password: ")
-                                if checkPasswordStatus(newPassword, confirmNewPsw):
-                                    user[index]['PSW'] = newPassword
-                                    return
-                        else:
-                            print("Incorrect answer. Try again")
-                    else:
-                        print("You cannot change your password. Please try later.")
-                        break
 
 # Login
     def login():
@@ -162,6 +174,19 @@ while True:
         address = input("Enter your address: ")
         user.append({'ID':id, 'Username':username, 'PSW':password, 'Question':specialQuestion, 'Answer':answer})
         userInfo.append({'ID':id, 'Name':name, 'Surname':surname, 'age':age, 'passport':passport, 'adsress':address})
+
+    # # Write updated data to CSV file
+    def writeDataToCsv():
+        directions = ["/Users/ogabekbakhodirov/Documents/Python/PythonTasks/CSVFiles/User-1.csv",
+                    "/Users/ogabekbakhodirov/Documents/Python/PythonTasks/CSVFiles/User_info-1.csv"]
+        file_headers = [user[0].keys(), userInfo[0].keys()]
+        row_values = [user, userInfo]
+
+        for index, value in enumerate(directions):
+            with open(directions[index], 'w') as file:
+                    writer = csv.DictWriter(file, fieldnames=file_headers[index])
+                    writer.writeheader()
+                    writer.writerows(row_values[index])
  
 #  Entery
     firstMove = int(input('\nWhat you want to do: \nLogin - 0 \nRegister - 1 \nStop - 2\nOnly number! -> '))
@@ -170,4 +195,5 @@ while True:
     elif firstMove == 1:
         register()
     else:
+        writeDataToCsv()
         break

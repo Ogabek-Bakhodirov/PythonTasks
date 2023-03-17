@@ -5,34 +5,35 @@ class Node:
 
 class LinkedList:
     def __init__(self):
-        self.__head = None
+        self.head = None
         self.__tail = None
 
     def add(self, addedValue):
         newValue = Node(addedValue)
-        if self.__head == None:
-            self.__head = newValue
+        if self.head == None:
+            self.head = newValue
             self.__tail = newValue
         else:
             self.__tail.next = newValue
             self.__tail = newValue
 
     def printElements(self):
-        value = self.__head
+        value = self.head
         while(value != None):
             print(value.info)
             value = value.next
 
     def deleteTop(self):
-        deletedElement = self.__head
-        self.__head = self.__head.next
+        deletedElement = self.head
+        self.head = self.head.next
         del(deletedElement)
 
 
-    def addToHead(self, x):
-        head = Node(x)
-        head.next = self.__head
-        self.__head = head
+    # def addToHead(self, x):
+    #     head = Node(x)
+    #     head.next = self.__head
+    #     self.__head = head
+
 
     # def addToAfterX(self, after, value):
     #     newValue = Node(value)
@@ -47,24 +48,22 @@ class LinkedList:
         
 
 linkedList = LinkedList()
-linkedList.add(23)
+linkedList.add(2)
 linkedList.add(11)
-linkedList.add(22)
+linkedList.add(10)
+linkedList.add(12)
+linkedList.add(9)
+linkedList.add(110)
+linkedList.add(900)
 linkedList.printElements()
 print("\n")
-linkedList.addToHead(20)
-linkedList.printElements()
 
-print("\n")
-linkedList.deleteTop()
-linkedList.printElements()
+current = linkedList.head
+print(current.info)
 
-# print("\n")
-# linkedList.addToAfterX(5, 100)
-# linkedList.printElements()
+while current.next != None:
+    next = current.next
+    if current.info < next.info:
+        print(next.info)
+    current = next   
 
-
-
-# node = Node("D")
-# node.__next = 1
-# print(node.__info)

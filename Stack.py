@@ -31,29 +31,25 @@ class Stack:
     def printValues(self):
         print(self.list)
 
-value = '{x(xx})'
-stack = Stack()
-for i in value:
-    if i == '(':
-        stack.push(1)
-    elif i == ')':
-        stack.push(-1)
-    elif i == '{':
-        stack.push(2)
-    elif i == '}':
-        stack.push(-2)
-    else:
-        stack.push(0)
 
-stack.printValues()
 
-print("\n")
 
-def checker(stack, index):
-    count = 0
-    for value in stack:
-        if value != 0:
-            print(value)
-        count += 1
+# def check_parentheses_spelling(string):
+#     stack = Stack()
+#     returnValue = False
+#     for char in string:
+#         if char in ['(', '{']:
+#             stack.push(char)
+#         elif char in [')', '}']:
+#             if len(stack.list) == 0:
+#                 returnValue = False
+#             opening_bracket = stack.pop()
+#             if (char == ')' and opening_bracket != '(') or (char == '}' and opening_bracket != '{'):
+#                 returnValue = False
+#     return len(stack.list) == 0
 
-checker(stack.list, 0)
+
+
+# print(check_parentheses_spelling("(x{xx(x(x))x}xxx)"))  # True
+# print(check_parentheses_spelling("{x(xx})"))  # False
+# print(check_parentheses_spelling("((x){xx}{((x)(x))(x)})"))  # True
